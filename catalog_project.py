@@ -1,7 +1,9 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for, flash
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item, User
+
+import datetime
 
 app = Flask(__name__)
 
@@ -14,7 +16,7 @@ session = DBSession()
 @app.route('/')
 @app.route('/home')
 def showHome():
-    return 'it works'
+    return render_template('home.html')
 
 
 #############Routes for categories#############
@@ -27,9 +29,15 @@ def allCategories():
 def showCategory(category):
     return 'category'
 
-@app.route('/category/new/')
+@app.route('/category/new/', methods=['GET', 'POST'])
 def newCategory():
-    return 'new category'
+    if request.method == 'POST':
+        newCategory = Category(name=request.form['name'], description=request.form['description'], last_edit=datetime.datetime.now(), user_id='1', spotlight=False)
+        session.add(newCategory)
+        session.commit()
+        return redirect(url_for('home.html'))
+    else:
+        return render_template('newcategory.html')
 
 @app.route('/category/<int:category>/edit/')
 def editCategory(category):
