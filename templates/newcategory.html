@@ -2,19 +2,41 @@
 
 {% block content %}
 
+<div class="row top-menu">
+  <div class="col-md-10"></div>
+  <div class="col-md-2 text-right"></div>
+</div>
+<div class="row divider blue">
+  <div class="col-md-12"></div>
+</div>
+<div class="row banner main">
+  <div class="col-md-1"></div>
+  <div class="col-md-11 padding-none">
+    <h1>Create a new Category</h1>
+  </div>
+</div>
 
-<div class="row">
-  <div class="col-md-6 col-md-offset-1 padding-top">
+
+<div class="row padding-top padding-bottom">
+  <div class="col-md-1"></div>
+  <div class="col-md-4 padding-none">
     <form action="#" method = "post">
       <div class="form-group">
       <label for="name">Name:</label>
       <input type ="text" class="form-control" maxlength="100" name="name">
+      <br>
+      <label for="description">Descripion:</label>
+      <input type ="text" class="form-control" maxlength="400" name="description">
+      <br>
+      <label for="spotlight">Check to show this item on the home </label>
+      <input type ="checkbox" name="spotlight" value="spotlight">
       <div class="padding-bottom"></div>
       <button type="submit" class="btn btn-default" id="submit" type="submit">
       <span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>Create</button>
       </div>
     </form>
   </div>
+  <div class="col-md-1"></div>
 </div>
 
 {% endblock %}

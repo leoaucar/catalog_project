@@ -23,7 +23,8 @@ def showHome():
 
 @app.route('/category/')
 def allCategories():
-    return 'categories'
+    categories = session.query(Category).order_by(asc(Category.name))
+    return render_template('categories.html', categories=categories)
 
 @app.route('/category/<int:category>/')
 def showCategory(category):
@@ -32,10 +33,18 @@ def showCategory(category):
 @app.route('/category/new/', methods=['GET', 'POST'])
 def newCategory():
     if request.method == 'POST':
-        newCategory = Category(name=request.form['name'], description=request.form['description'], last_edit=datetime.datetime.now(), user_id='1', spotlight=False)
+        if 'spotlight' in request.form:
+            spotlight = True
+        else:
+            spotlight = False
+        newCategory = Category(name=request.form['name'],
+                               description=request.form['description'],
+                               last_edit=datetime.datetime.now(),
+                               user_id='1',
+                               spotlight= spotlight)
         session.add(newCategory)
         session.commit()
-        return redirect(url_for('home.html'))
+        return redirect(url_for('showHome'))
     else:
         return render_template('newcategory.html')
 
