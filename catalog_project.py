@@ -26,9 +26,11 @@ def allCategories():
     categories = session.query(Category).order_by(asc(Category.name))
     return render_template('categories.html', categories=categories)
 
-@app.route('/category/<int:category>/')
-def showCategory(category):
-    return 'category'
+@app.route('/category/<int:category_id>/')
+def showCategory(category_id):
+    category = session.query(Category).filter_by(id=category_id).one()
+    #creator = session.query(User).filter_by(id=category.user_id).one()
+    return render_template('category.html', category=category)#, creator=creator
 
 @app.route('/category/new/', methods=['GET', 'POST'])
 def newCategory():
