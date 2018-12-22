@@ -7,10 +7,12 @@ import datetime
 
 app = Flask(__name__)
 
-engine = create_engine('sqlite:///catalogproject.db')
-Base.metadata.bind = engine
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
+def connect_db():
+    engine = create_engine('sqlite:///catalogproject.db')
+    Base.metadata.bind = engine
+    DBSession = sessionmaker(bind=engine)
+    session = DBSession()
+    return session
 
 
 @app.route('/')
@@ -23,17 +25,22 @@ def showHome():
 
 @app.route('/category/')
 def allCategories():
+    session = connect_db()
     categories = session.query(Category).order_by(asc(Category.name))
     return render_template('categories.html', categories=categories)
+    DBSession.remove()
 
 @app.route('/category/<int:category_id>/')
 def showCategory(category_id):
+    session = connect_db()
     category = session.query(Category).filter_by(id=category_id).one()
     #creator = session.query(User).filter_by(id=category.user_id).one()
     return render_template('category.html', category=category)#, creator=creator
+    DBSession.remove()
 
 @app.route('/category/new/', methods=['GET', 'POST'])
 def newCategory():
+    session = connect_db()
     if request.method == 'POST':
         if 'spotlight' in request.form:
             spotlight = True
@@ -49,6 +56,7 @@ def newCategory():
         return redirect(url_for('showHome'))
     else:
         return render_template('newcategory.html')
+    DBSession.remove()
 
 @app.route('/category/<int:category>/edit/')
 def editCategory(category):
